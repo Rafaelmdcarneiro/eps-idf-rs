@@ -1,0 +1,69 @@
+[template]
+cargo_generate_version = ">=0.17.4"
+ignore = [".git", "README.md", "cmake"]
+
+[hooks]
+pre = ["pre-script.rhai"]
+
+[placeholders.mcu]
+type = "string"
+prompt = "Which MCU to target?"
+choices = ["esp32", "esp32c2", "esp32c3", "esp32c6", "esp32h2", "esp32s2", "esp32s3"]
+default = "esp32"
+
+[placeholders.advanced]
+type = "bool"
+prompt = "Configure advanced template options?"
+default = false
+
+[conditional.'advanced'.placeholders.std]
+type = "bool"
+prompt = "Enable STD support?"
+default = true
+
+[conditional.'advanced'.placeholders.espidfver]
+type = "string"
+prompt = "ESP-IDF version (master = UNSTABLE)"
+choices = ["v5.1", "v5.2", "master"]
+default = "v5.2"
+
+[conditional.'advanced'.placeholders.devcontainer]
+type = "bool"
+prompt = "Configure project to use Dev Containers (VS Code and GitHub Codespaces)?"
+default = false
+
+[conditional.'advanced'.placeholders.wokwi]
+type = "bool"
+prompt = "Configure project to support Wokwi simulation with Wokwi VS Code extension?"
+default = false
+
+[conditional.'advanced'.placeholders.ci]
+type = "bool"
+prompt = "Add CI files for GitHub Action?"
+default = false
+
+[conditional.'!devcontainer']
+ignore = [
+    ".devcontainer/",
+    ".vscode/tasks.json",
+    ".dockerignore",
+    "docs/",
+    "scripts/",
+]
+
+[conditional.'!ci']
+ignore = [".github"]
+
+[conditional.'!wokwi']
+ignore = [".vscode/launch.json", "diagram.json", "wokwi.toml"]
+
+[conditional.'!advanced']
+ignore = [
+    ".devcontainer/",
+    ".vscode/",
+    "docs/",
+    "scripts/",
+    ".dockerignore",
+    "diagram.json",
+    "wokwi.toml",
+]
